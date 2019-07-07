@@ -1,0 +1,10 @@
+# Testing a failed size line 
+
+TITLE "Just for testing"
+
+DOMAIN_MIN 1.0 2.0 3.0
+DOMAIN_MAX 1.0 2.0 3.0 
+
+0.000000 0.000000 0.013947
+0.002749 0.000000 0.011855
+0.048985 0.000000 0.009458
