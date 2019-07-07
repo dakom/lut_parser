@@ -1,9 +1,10 @@
 [package]
 name = "lut_parser"
-version = "1.0.0"
+version = "1.0.1"
 edition = "2018"
 authors = ["David Komer <david.komer@gmail.com>"]
 license = "MIT"
 readme = "README.md"
 description = "Parser for LUT files"
 repository = "https://github.com/dakom/lut_parser"
+documentation = "https://docs.rs/lut_parser/1.0.1/lut_parser/"
