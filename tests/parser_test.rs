@@ -1,62 +1,62 @@
-use lut_parser::{parse_cube_lut, CubeLut, LutKind, LutError};
+use lut_parser::{CubeLut, LutKind, LutError};
 use num_traits::{Float};
 #[test]
 fn it_errors_size_line() {
-    let res = parse_cube_lut::<f64>(include_str!("data/size-line-fail.cube")).unwrap_err();
+    let res = CubeLut::<f64>::from_str(include_str!("data/size-line-fail.cube")).unwrap_err();
     assert_eq!(res, LutError::SizeLine);
 }
 #[test]
 fn it_errors_title() {
-    let res = parse_cube_lut::<f64>(include_str!("data/title-fail.cube")).unwrap_err();
+    let res = CubeLut::<f64>::from_str(include_str!("data/title-fail.cube")).unwrap_err();
     assert_eq!(res, LutError::Title);
 }
 #[test]
 fn it_errors_data_line() {
-    let res = parse_cube_lut::<f64>(include_str!("data/data-line-fail.cube")).unwrap_err();
+    let res = CubeLut::<f64>::from_str(include_str!("data/data-line-fail.cube")).unwrap_err();
     assert_eq!(res, LutError::DataLine(5));
 }
 
 #[test]
 fn it_errors_data_red() {
-    let res = parse_cube_lut::<f64>(include_str!("data/data-red-fail.cube")).unwrap_err();
+    let res = CubeLut::<f64>::from_str(include_str!("data/data-red-fail.cube")).unwrap_err();
     assert_eq!(res, LutError::DataRed(5));
 }
 
 #[test]
 fn it_errors_data_green() {
-    let res = parse_cube_lut::<f64>(include_str!("data/data-green-fail.cube")).unwrap_err();
+    let res = CubeLut::<f64>::from_str(include_str!("data/data-green-fail.cube")).unwrap_err();
     assert_eq!(res, LutError::DataGreen(5));
 }
 
 #[test]
 fn it_errors_data_blue() {
-    let res = parse_cube_lut::<f64>(include_str!("data/data-blue-fail.cube")).unwrap_err();
+    let res = CubeLut::<f64>::from_str(include_str!("data/data-blue-fail.cube")).unwrap_err();
     assert_eq!(res, LutError::DataBlue(5));
 }
 
 #[test]
 fn it_errors_domain_min() {
-    let res = parse_cube_lut::<f64>(include_str!("data/domain-min-fail.cube")).unwrap_err();
+    let res = CubeLut::<f64>::from_str(include_str!("data/domain-min-fail.cube")).unwrap_err();
     assert_eq!(res, LutError::DomainMin(2));
 }
 
 #[test]
 fn it_errors_domain_max() {
-    let res = parse_cube_lut::<f64>(include_str!("data/domain-max-fail.cube")).unwrap_err();
+    let res = CubeLut::<f64>::from_str(include_str!("data/domain-max-fail.cube")).unwrap_err();
     assert_eq!(res, LutError::DomainMax(3));
 }
 
 #[test]
 fn it_errors_size_value() {
-    let res = parse_cube_lut::<f64>(include_str!("data/size-value-fail.cube")).unwrap_err();
+    let res = CubeLut::<f64>::from_str(include_str!("data/size-value-fail.cube")).unwrap_err();
     assert_eq!(res, LutError::Size(1));
 }
 
 #[test]
 fn it_succeeds() {
-    let res = parse_cube_lut::<f64>(include_str!("data/success.cube")).unwrap();
+    let res = CubeLut::<f64>::from_str(include_str!("data/success.cube")).unwrap();
     check_res(res);
-    let res = parse_cube_lut::<f32>(include_str!("data/success.cube")).unwrap();
+    let res = CubeLut::<f32>::from_str(include_str!("data/success.cube")).unwrap();
     check_res(res);
 }
 
