@@ -1,6 +1,6 @@
 [package]
 name = "lut_parser"
-version = "1.0.2"
+version = "1.1.0"
 edition = "2018"
 authors = ["David Komer <david.komer@gmail.com>"]
 license = "MIT"
@@ -8,3 +8,6 @@ readme = "README.md"
 description = "Parser for LUT files"
 repository = "https://github.com/dakom/lut_parser"
 documentation = "https://docs.rs/lut_parser/1.0.0/lut_parser/"
+
+[dependencies]
+num-traits = "0.2"

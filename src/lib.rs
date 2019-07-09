@@ -1,11 +1,15 @@
+use num_traits::{Float};
+use std::str::FromStr;
+use std::num::{ParseFloatError};
+
 #[derive(Debug)]
-pub struct CubeLut {
+pub struct CubeLut <T: Float> {
     pub title: String,
     pub kind: LutKind,
-    pub domain_min: [f64;3],
-    pub domain_max: [f64;3],
+    pub domain_min: [T;3],
+    pub domain_max: [T;3],
     pub size: usize,
-    pub data: Vec<[f64;3]>
+    pub data: Vec<[T;3]>
 }
 
 #[derive(Debug, PartialEq)]
@@ -27,15 +31,15 @@ pub enum LutError {
     DataLine(usize),
 }
 
-pub fn parse_cube_lut(txt:&str) -> Result<CubeLut, LutError> {
+pub fn parse_cube_lut<T: Float + FromStr<Err=ParseFloatError>>(txt:&str) -> Result<CubeLut<T>, LutError> {
     let mut title:Option<String> = None;
     let mut kind:Option<LutKind> = None;
-    let mut domain_min = [0.0f64;3];
-    let mut domain_max = [1.0f64;3];
+    let mut domain_min = [T::zero();3];
+    let mut domain_max = [T::one();3];
     let mut size:usize = 0;
 
     //non-empty and non-comment lines 
-    let mut lines = txt
+    let lines = txt
         .lines()
         .filter(|line| {
             match line.chars().next() {
@@ -45,7 +49,7 @@ pub fn parse_cube_lut(txt:&str) -> Result<CubeLut, LutError> {
             }
         });
 
-    let mut data:Vec<[f64;3]> = Vec::with_capacity(lines.clone().count());
+    let mut data:Vec<[T;3]> = Vec::with_capacity(lines.clone().count());
 
     for (line_number, line) in lines.enumerate() {
         let mut parts = line.split_whitespace();
@@ -82,9 +86,9 @@ pub fn parse_cube_lut(txt:&str) -> Result<CubeLut, LutError> {
             _ => { 
                 match (first, parts.next(), parts.next()) {
                     (Some(r), Some(g), Some(b)) => {
-                        let r = r.parse::<f64>().map_err(|_| LutError::DataRed(line_number))?;
-                        let g = g.parse::<f64>().map_err(|_| LutError::DataGreen(line_number))?;
-                        let b = b.parse::<f64>().map_err(|_| LutError::DataBlue(line_number))?;
+                        let r = r.parse::<T>().map_err(|_| LutError::DataRed(line_number))?;
+                        let g = g.parse::<T>().map_err(|_| LutError::DataGreen(line_number))?;
+                        let b = b.parse::<T>().map_err(|_| LutError::DataBlue(line_number))?;
                         data.push([r, g, b]);
                     },
                     _ => {
@@ -116,21 +120,21 @@ pub fn parse_cube_lut(txt:&str) -> Result<CubeLut, LutError> {
 }
 
 
-fn parse_domain<'a, T: Iterator<Item=&'a str>>(parts:T) -> Option<Vec<f64>> {
+fn parse_domain<'a, N: Float + FromStr<Err=ParseFloatError>, T: Iterator<Item=&'a str>>(parts:T) -> Option<Vec<N>> {
     let values = 
         parts
-        .map(|value| value.parse::<f64>())
-        .collect::<Result<Vec<f64>, std::num::ParseFloatError>>();
+        .map(|value| value.parse::<N>())
+        .collect::<Result<Vec<N>, std::num::ParseFloatError>>();
 
     match values {
         Ok(values) => {
-            if(values.len() < 3) {
+            if values.len() < 3 {
                 None 
             } else {
                 Some(values)
             }
         },
-        Err(err) => {
+        Err(_) => {
             None 
         }
     }
