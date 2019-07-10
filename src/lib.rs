@@ -1,6 +1,8 @@
 use num_traits::{Float};
 use std::str::FromStr;
 use std::num::{ParseFloatError};
+use std::mem::transmute;
+use std::slice::from_raw_parts;
 
 #[derive(Debug)]
 pub struct CubeLut <T: Float> {
@@ -32,6 +34,13 @@ pub enum LutError {
 }
 
 impl <T: Float + FromStr<Err=ParseFloatError>> CubeLut<T> {
+
+    pub fn flatten_data(&self) -> &[T] {
+        unsafe {
+            transmute( from_raw_parts(self.data.as_ptr(), self.data.len() * 3) )
+        }
+    }
+
     pub fn from_str(txt:&str) -> Result<Self, LutError> {
         let mut title:Option<String> = None;
         let mut kind:Option<LutKind> = None;

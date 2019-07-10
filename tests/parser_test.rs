@@ -60,11 +60,31 @@ fn it_succeeds() {
     check_res(res);
 }
 
+#[test]
+fn it_flattens() {
+    let res = CubeLut::<f64>::from_str(include_str!("data/success.cube")).unwrap();
+    let values = get_values::<f64>();
+
+    for (i,n) in res.flatten_data().iter().enumerate() {
+        assert_eq!(*n, values[i]);
+    }
+}
 fn check_res<T: Float + std::fmt::Debug>(res: CubeLut<T>) {
     assert_eq!(res.title, "\"Just for testing\"");
     assert_eq!(res.kind, LutKind::Three); 
     assert_eq!(res.domain_min[1], T::from(2.0).unwrap()); 
     assert_eq!(res.domain_max[2], T::from(3.0).unwrap()); 
     assert_eq!(res.size, 32); 
-    assert_eq!(res.data[1][1], T::from(0.42).unwrap()); 
+
+    let values = get_values();
+
+    for (x,row) in res.data.iter().enumerate() {
+        for (y, col) in row.iter().enumerate() {
+            assert_eq!(*col, values[x * 3 + y]);
+        }
+    }
+}
+
+fn get_values<T: Float + std::fmt::Debug>() -> Vec<T> {
+    vec![0.000000,0.000000,0.013947,0.002749,0.420000,0.011855,0.048985,0.000000, 0.009458].iter().map(|n| T::from(*n).unwrap()).collect::<Vec<T>>()
 }
