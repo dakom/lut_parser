@@ -7,7 +7,7 @@ license = "MIT"
 readme = "README.md"
 description = "Parser for LUT files"
 repository = "https://github.com/dakom/lut_parser"
-documentation = "https://docs.rs/lut_parser/2.1.0/lut_parser/"
+documentation = "https://docs.rs/lut_parser/2.1.1/lut_parser/"
 
 [dependencies]
 num-traits = "0.2"
